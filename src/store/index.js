@@ -5,48 +5,6 @@ import modules from './modules'
 
 Vue.use(Vuex)
 
-/*
-function TPlayer.getAttribMax(Index: Integer): Integer;
-begin
-  result := FAttrib[Index].Max;
-end;
-
-function TPlayer.getAttrib(Index: Integer): Integer;
-begin
-  result := FAttrib[Index].Current;
-end;
-
-function TPlayer.getPoint(Index: Integer): Boolean;
-begin
-  result := FPoints[Index];
-end;
-
-function TPlayer.getPointsCount: Integer;
-begin
-  result := Length(FPoints);
-end;
-
-procedure TPlayer.modifyTime(Value: Integer);
-begin
-  FTime := FTime + Value;
-end;
-
-procedure TPlayer.setPoint(Index: Integer; Value: Boolean);
-begin
-  FPoints[Index] := Value;
-end;
-
-procedure TPlayer.setPointsCount(Value: Integer);
-begin
-  SetLength(FPoints, Value);
-end;
-
-function TPlayer.getAttribCount: Integer;
-begin
-  result := Length(FAttrib);
-end;
- */
-
 export default new Vuex.Store({
   modules,
   state: {
@@ -73,7 +31,10 @@ export default new Vuex.Store({
     setPoint: (state, { index, value }) => {},
 
     resetTime: state => { state.time = 0 },
-    modifyTime: (state, value) => { state.time += value },
+    modifyTime: (state, value) => {
+      const newValue = state.time + value
+      state.time = (newValue > 0) ? newValue : 0
+    },
 
     createAttrib: (state, { index, value }) => {
       Vue.set(

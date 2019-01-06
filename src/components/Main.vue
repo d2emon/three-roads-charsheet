@@ -66,47 +66,32 @@
                 </v-list>
               </v-menu>
               <v-menu offset-y>
-                <v-btn
-                  slot="activator"
-                  flat
-                >
-                  Время
-                </v-btn>
+                <v-btn slot="activator" flat>Время</v-btn>
                 <v-list>
-                  <v-list-tile @click="timeForward">
+                  <v-list-tile @click="modifyTime(1)">
                     <v-list-tile-title><v-icon>fast_forward</v-icon>Вперед</v-list-tile-title>
                   </v-list-tile>
-                  <v-list-tile @click="timeBackward">
+                  <v-list-tile @click="modifyTime(-1)">
                     <v-list-tile-title><v-icon>fast_rewind</v-icon>Назад</v-list-tile-title>
                   </v-list-tile>
-                  <v-list-tile @click="timeReset">
+                  <v-list-tile @click="resetTime">
                     <v-list-tile-title><v-icon>replay</v-icon>Сброс</v-list-tile-title>
                   </v-list-tile>
                 </v-list>
               </v-menu>
               <v-menu offset-y>
-                <v-btn
-                  slot="activator"
-                  flat
-                >
-                  Dice
-                </v-btn>
+                <v-btn slot="activator" flat>Бросок</v-btn>
                 <v-list>
                   <v-list-tile @click="roll">
-                    <v-list-tile-title><v-icon>casino</v-icon>Roll</v-list-tile-title>
+                    <v-list-tile-title><v-icon>casino</v-icon>Кость</v-list-tile-title>
                   </v-list-tile>
                   <v-list-tile @click="coin">
-                    <v-list-tile-title><v-icon>casino</v-icon>Coin</v-list-tile-title>
+                    <v-list-tile-title><v-icon>casino</v-icon>Монета</v-list-tile-title>
                   </v-list-tile>
                 </v-list>
               </v-menu>
               <v-menu offset-y>
-                <v-btn
-                  slot="activator"
-                  flat
-                >
-                  Проверка
-                </v-btn>
+                <v-btn slot="activator" flat>Проверка</v-btn>
                 <v-list>
                   <v-list-tile
                     v-for="(a, index) in attrib"
@@ -156,26 +141,7 @@
             </v-flex>
 
             <v-flex xs6>
-              <v-card>
-                <v-toolbar>
-                  <v-toolbar-title>Время</v-toolbar-title>
-                  <v-spacer></v-spacer>
-                  <v-toolbar-items class="hidden-sm-and-down">
-                    <v-btn icon flat @click="timeBackward"><v-icon>fast_rewind</v-icon></v-btn>
-                    <v-btn icon flat @click="timeForward"><v-icon>fast_forward</v-icon></v-btn>
-                    <v-btn icon flat @click="timeReset"><v-icon>replay</v-icon></v-btn>
-                  </v-toolbar-items>
-                </v-toolbar>
-                <v-card-text>
-                  <v-progress-circular
-                    :value="(time / 24) * 100"
-                    :size="100"
-                    :width="15"
-                  >
-                    {{time}}
-                  </v-progress-circular>
-                </v-card-text>
-              </v-card>
+              <GameTime />
             </v-flex>
             <v-flex xs6>
               <v-card>
@@ -278,17 +244,18 @@
   import dice from '../dice'
   import InputBox from './InputBox'
   import TestResult from './TestResult'
+  import GameTime from './GameTime'
 
   export default {
     name: "Main",
     components: {
         InputBox,
         TestResult,
+        GameTime,
     },
     computed: {
       ...mapState([
         'playerName',
-        'time',
         'items',
         'spells',
         'attrib',
@@ -306,10 +273,6 @@
       checkbox: false,
     }),
     methods: {
-      timeForward() { this.$store.commit('modifyTime', 1) },
-      timeBackward() { this.$store.commit('modifyTime', -1) },
-      timeReset() { this.$store.commit('resetTime') },
-
       addItem(name) { this.$store.commit('addItem', name) },
       deleteItem(index) { this.$store.commit('deleteItem', index) },
       eatItem(index) {
@@ -347,6 +310,10 @@
       setPlayer() {},
 
       setPlayerName(name) { this.$store.dispatch('createPlayer', { name }) },
+      ...mapMutations([
+          'modifyTime',
+          'resetTime',
+      ]),
       ...mapMutations( 'roll', [ 'setResult', ] ),
       ...mapMutations( 'input', [ 'showInput', ] ),
     },
