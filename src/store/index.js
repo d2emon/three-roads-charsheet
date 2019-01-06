@@ -82,7 +82,7 @@ export default new Vuex.Store({
     deletePoint: state => { state.points -= 1 },
   },
   actions: {
-    createPlayer: ({ commit, dispatch }, { name }) => {
+    createPlayer: ({ commit, dispatch }, name) => {
       commit('createPlayer', { name })
       dispatch('reset')
       dispatch('generate')

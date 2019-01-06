@@ -5,12 +5,10 @@
         title="Player Name"
         label="Enter Player Name"
         default="Unnamed"
-        @input="setPlayerName"
+        @input="createPlayer"
     />
 
-    <TestResult
-        title="Результат"
-    />
+    <TestResult title="Результат" />
 
     <v-layout wrap>
       <v-flex xs12>
@@ -18,17 +16,10 @@
           <v-toolbar>
             <v-toolbar-items class="hidden-sm-and-down">
               <v-menu offset-y>
-                <v-btn
-                  slot="activator"
-                  flat
-                >
-                  Player
-                </v-btn>
+                <v-btn slot="activator" flat>Игрок</v-btn>
                 <v-list>
-                  <v-list-tile
-                    @click="resetPlayer"
-                  >
-                    <v-list-tile-title>Reset</v-list-tile-title>
+                  <v-list-tile @click="reset">
+                    <v-list-tile-title>Сброс</v-list-tile-title>
                   </v-list-tile>
                   <v-list-tile @click="savePlayer">
                     <v-list-tile-title>Save</v-list-tile-title>
@@ -72,7 +63,7 @@
                   <v-list-tile
                     v-for="(a, index) in attrib"
                     :key="index"
-                    @click="testAttrib(index)"
+                    @click="doTest(index)"
                   >
                     <v-list-tile-title><v-icon>casino</v-icon>{{attrNames[index]}}</v-list-tile-title>
                   </v-list-tile>
@@ -93,27 +84,12 @@
                   sdSave: TSaveDialog;
           </div>
           <v-layout row wrap>
-            <v-flex xs12><h1>{{playerName}}</h1></v-flex>
+            <v-flex xs12><h1 @click="showInput('player')">{{playerName}}</h1></v-flex>
 
             <v-flex xs12>
-              <v-layout>
-                <v-flex xs4
-                  v-for="(item, index) in attrib"
-                  :key="index"
-                >
-                  <v-card>
-                    <v-card-title primary-title>
-                      <h3 v-html="attrNames[index]" />
-                    </v-card-title>
-                    <v-card-text>
-                      <h4>{{item.current}} / {{item.max}}</h4>
-                    </v-card-text>
-                    <v-card-actions>
-                      <v-btn @click="testAttrib(index)">Проверить</v-btn>
-                    </v-card-actions>
-                  </v-card>
-                </v-flex>
-              </v-layout>
+              <GameAttributes
+                  :names="attrNames"
+              />
             </v-flex>
 
             <v-flex xs6>
@@ -131,13 +107,7 @@
             </v-flex>
 
             <v-flex xs12>
-              <v-card>
-                <v-textarea
-                  label="Заметки"
-                  v-model="memo"
-                  rows="7"
-                />
-              </v-card>
+              <GameMemo />
             </v-flex>
           </v-layout>
         </v-card>
@@ -147,7 +117,7 @@
 </template>
 
 <script>
-  import { mapState, mapMutations } from 'vuex'
+  import { mapState, mapMutations, mapActions } from 'vuex'
   import dice from '../dice'
   import InputBox from './InputBox'
   import TestResult from './TestResult'
@@ -155,10 +125,14 @@
   import GameItems from './GameItems'
   import GamePoints from "./GamePoints";
   import GameSpells from "./GameSpells";
+  import GameMemo from "./GameMemo";
+  import GameAttributes from "./GameAttributes";
 
   export default {
     name: "Main",
     components: {
+        GameAttributes,
+        GameMemo,
         GameSpells,
         GamePoints,
         InputBox,
@@ -175,7 +149,6 @@
       ]),
     },
     data: () =>({
-      memo: '',
       attrNames: [
         'Мастерство',
         'Выносливость',
@@ -183,26 +156,27 @@
       ],
     }),
     methods: {
-      resetPlayer() { this.$store.dispatch('reset') },
-
       savePlayer() { /* procedure Save1Click(Sender: TObject); */ },
       loadPlayer() { /* procedure Load1Click(Sender: TObject); */ },
       editPlayer() { /* procedure Edit2Click(Sender: TObject); */ },
 
       roll() { /* fmRoller.Show; */ },
       coin() { this.setResult((dice(1, 2) === 1) ? 'Орел' : 'Решка') },
-      testAttrib(index) {
-        this.$store.dispatch('testAttrib', index)
+      doTest(index) {
+        this.testAttrib(index)
           .then(result => {
             this.setResult(result ? 'Успех!' : 'Провал!')
-            this.$store.commit('modifyAttrib', { index, value: -1 })
+            this.modifyAttrib({ index, value: -1 })
           });
       },
 
-      setPlayer() {},
-
-      setPlayerName(name) { this.$store.dispatch('createPlayer', { name }) },
+      ...mapActions([
+          'testAttrib',
+          'createPlayer',
+          'reset',
+      ]),
       ...mapMutations([
+          'modifyAttrib',
           'modifyTime',
           'resetTime',
       ]),
