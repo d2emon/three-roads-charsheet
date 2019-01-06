@@ -120,7 +120,7 @@ export default new Vuex.Store({
       }
       alert(JSON.stringify(player))
     },
-    loadPlayer: ({ state }) => {
+    loadPlayer: () => {
       /*
       Player.PlayerName := PlayerFile.ReadString('Main', 'Name', 'Unnamed');
       Player.ResetTime;

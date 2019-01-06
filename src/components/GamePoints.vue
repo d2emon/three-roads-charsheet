@@ -22,6 +22,7 @@
         <v-card-text>
             <v-checkbox
                 v-for="index in points"
+                :key="index"
                 :label="`${index}`"
                 v-model="checkboxes"
                 :value="index"
