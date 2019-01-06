@@ -9,14 +9,6 @@
     />
 
     <InputBox
-        input-box-id="item"
-        title="Item Name"
-        label="Enter Item"
-        default="Item"
-        @input="addItem"
-    />
-
-    <InputBox
         input-box-id="spell"
         title="Spell Name"
         label="Enter Spell"
@@ -144,32 +136,7 @@
               <GameTime />
             </v-flex>
             <v-flex xs6>
-              <v-card>
-                <v-toolbar>
-                  <v-toolbar-title>Предметы</v-toolbar-title>
-                  <v-spacer></v-spacer>
-                  <v-toolbar-items class="hidden-sm-and-down">
-                    <v-btn icon flat @click="showInput('item')"><v-icon>add</v-icon></v-btn>
-                    <v-btn icon flat @click="clearItems"><v-icon>clear</v-icon></v-btn>
-                  </v-toolbar-items>
-                </v-toolbar>
-                <v-card-text>
-                  <v-list>
-                    <v-list-tile
-                      v-for="(item, index) in items"
-                      :key="index"
-                    >
-                      <v-list-tile-content>
-                        <v-list-tile-title v-html="item"></v-list-tile-title>
-                      </v-list-tile-content>
-                      <v-list-tile-action>
-                        <v-btn icon flat @click="deleteItem(index)"><v-icon>remove</v-icon></v-btn>
-                        <v-btn icon flat @click="eatItem(index)"><v-icon>restaurant</v-icon></v-btn>
-                      </v-list-tile-action>
-                    </v-list-tile>
-                  </v-list>
-                </v-card-text>
-              </v-card>
+              <GameItems />
             </v-flex>
 
             <v-flex xs6>
@@ -245,6 +212,7 @@
   import InputBox from './InputBox'
   import TestResult from './TestResult'
   import GameTime from './GameTime'
+  import GameItems from './GameItems'
 
   export default {
     name: "Main",
@@ -252,6 +220,7 @@
         InputBox,
         TestResult,
         GameTime,
+        GameItems,
     },
     computed: {
       ...mapState([
@@ -273,14 +242,6 @@
       checkbox: false,
     }),
     methods: {
-      addItem(name) { this.$store.commit('addItem', name) },
-      deleteItem(index) { this.$store.commit('deleteItem', index) },
-      eatItem(index) {
-        this.$store.commit('deleteItem', index)
-        this.$store.commit('modifyAttrib', { index: 1, value: 1 })
-      },
-      clearItems() { this.$store.commit('resetItems') },
-
       addSpell(name) { this.$store.commit('addSpell', name) },
       deleteSpell(index) { this.$store.commit('deleteSpell', index) },
       clearSpells() { this.$store.commit('resetSpells') },
