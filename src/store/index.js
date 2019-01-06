@@ -16,6 +16,7 @@ export default new Vuex.Store({
     pointsValues: [],
     money: 0,
     time: 0,
+    memo: '',
   },
   getters: {
     getAttribCount: () => 0,
@@ -105,5 +106,50 @@ export default new Vuex.Store({
         : dice(2, 6)
       return state.attrib[index].current >= roll
     },
+    savePlayer: ({ state }) => {
+      const player = {
+        name: state.playerName,
+        time: state.time,
+        items: state.items,
+        spells: state.spells,
+        points: {
+          count: state.points,
+          values: state.values,
+        },
+        memo: state.memo,
+      }
+      alert(JSON.stringify(player))
+    },
+    loadPlayer: ({ state }) => {
+      /*
+      Player.PlayerName := PlayerFile.ReadString('Main', 'Name', 'Unnamed');
+      Player.ResetTime;
+      Player.modifyTime(PlayerFile.ReadInteger('Main', 'Time', 0));
+
+      c := PlayerFile.ReadInteger('Items', 'Count', 0);
+      for i:=0 to c-1 do
+      begin
+        Player.Items.Add(PlayerFile.ReadString('Items', IntToStr(i), ''));
+      end;
+
+      c := PlayerFile.ReadInteger('Spells', 'Count', 0);
+      for i:=0 to c-1 do
+      begin
+        Player.Spells.Add(PlayerFile.ReadString('Spells', IntToStr(i), ''));
+      end;
+
+      Player.PointsCount := PlayerFile.ReadInteger('Points', 'Count', 0);
+      for i:=0 to Player.PointsCount -1 do
+      begin
+        Player.setPoint(i, PlayerFile.ReadBool('Points', IntToStr(i), false));
+      end;
+
+      c := PlayerFile.ReadInteger('Memo', 'Count', 0);
+      for i:=0 to c-1 do
+      begin
+        Player.Items.Add(PlayerFile.ReadString('Memo', IntToStr(i), ''));
+      end;
+       */
+    }
   }
 })

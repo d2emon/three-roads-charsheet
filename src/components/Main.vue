@@ -9,6 +9,7 @@
     />
 
     <TestResult title="Результат" />
+    <RollBox />
 
     <v-layout wrap>
       <v-flex xs12>
@@ -49,7 +50,7 @@
               <v-menu offset-y>
                 <v-btn slot="activator" flat>Бросок</v-btn>
                 <v-list>
-                  <v-list-tile @click="roll">
+                  <v-list-tile @click="showRollBox">
                     <v-list-tile-title><v-icon>casino</v-icon>Кость</v-list-tile-title>
                   </v-list-tile>
                   <v-list-tile @click="coin">
@@ -71,18 +72,6 @@
               </v-menu>
             </v-toolbar-items>
           </v-toolbar>
-          <div class="main-menu">
-                    Player1: TMenuItem;
-                      Save1: TMenuItem;
-                      Load1: TMenuItem;
-                    Dice1: TMenuItem;
-                      Roll1: TMenuItem;
-
-                  Edit2: TMenuItem;
-
-                  odOpen: TOpenDialog;
-                  sdSave: TSaveDialog;
-          </div>
           <v-layout row wrap>
             <v-flex xs12><h1 @click="showInput('player')">{{playerName}}</h1></v-flex>
 
@@ -127,10 +116,12 @@
   import GameSpells from "./GameSpells";
   import GameMemo from "./GameMemo";
   import GameAttributes from "./GameAttributes";
+  import RollBox from "./RollBox";
 
   export default {
     name: "Main",
     components: {
+        RollBox,
         GameAttributes,
         GameMemo,
         GameSpells,
@@ -156,11 +147,8 @@
       ],
     }),
     methods: {
-      savePlayer() { /* procedure Save1Click(Sender: TObject); */ },
-      loadPlayer() { /* procedure Load1Click(Sender: TObject); */ },
       editPlayer() { /* procedure Edit2Click(Sender: TObject); */ },
 
-      roll() { /* fmRoller.Show; */ },
       coin() { this.setResult((dice(1, 2) === 1) ? 'Орел' : 'Решка') },
       doTest(index) {
         this.testAttrib(index)
@@ -174,13 +162,21 @@
           'testAttrib',
           'createPlayer',
           'reset',
+          'savePlayer',
+          'loadPlayer',
       ]),
       ...mapMutations([
           'modifyAttrib',
           'modifyTime',
           'resetTime',
       ]),
-      ...mapMutations( 'roll', [ 'setResult', ] ),
+      ...mapMutations(
+          'roll',
+          [
+              'setResult',
+              'showRollBox',
+          ]
+      ),
       ...mapMutations( 'input', [ 'showInput', ] ),
     },
     mounted() { this.showInput('player') }

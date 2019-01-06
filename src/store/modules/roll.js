@@ -1,6 +1,7 @@
 const state = {
     result: 0,
     showResult: false,
+    showRollBox: false,
 }
 
 const mutations = {
@@ -10,6 +11,8 @@ const mutations = {
     },
     showResult(state) { state.showResult = true },
     hideResult(state) { state.showResult = false },
+    showRollBox(state) { state.showRollBox = true },
+    hideRollBox(state) { state.showRollBox = false },
 }
 
 export default {
