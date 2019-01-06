@@ -1,155 +1,40 @@
 <template>
   <v-container grid-list-md>
-    <v-dialog
-      v-model="inputPlayer"
-      width="500"
-    >
-      <v-card>
-        <v-card-title
-          class="headline grey lighten-2"
-          primary-title
-        >
-          Player Name
-        </v-card-title>
-        <v-card-text>
-          <v-text-field
-            v-model="name"
-            label="Enter Player Name"
-            required
-          />
-        </v-card-text>
-        <v-divider></v-divider>
-        <v-card-actions>
-          <v-spacer></v-spacer>
-            <v-btn
-              color="primary"
-              @click="setPlayerName"
-            >
-              Ok
-            </v-btn>
-        </v-card-actions>
-      </v-card>
-    </v-dialog>
+    <InputBox
+        input-box-id="player"
+        title="Player Name"
+        label="Enter Player Name"
+        default="Unnamed"
+        @input="setPlayerName"
+    />
 
-    <v-dialog
-      v-model="inputItem"
-      width="500"
-    >
-      <v-card>
-        <v-card-title
-          class="headline grey lighten-2"
-          primary-title
-        >
-          Item Name
-        </v-card-title>
-        <v-card-text>
-          <v-text-field
-            v-model="itemName"
-            label="Enter Item"
-            required
-          />
-        </v-card-text>
-        <v-divider></v-divider>
-        <v-card-actions>
-          <v-spacer></v-spacer>
-            <v-btn
-              color="primary"
-              @click="addItem"
-            >
-              Ok
-            </v-btn>
-        </v-card-actions>
-      </v-card>
-    </v-dialog>
+    <InputBox
+        input-box-id="item"
+        title="Item Name"
+        label="Enter Item"
+        default="Item"
+        @input="addItem"
+    />
 
-    <v-dialog
-      v-model="inputSpell"
-      width="500"
-    >
-      <v-card>
-        <v-card-title
-          class="headline grey lighten-2"
-          primary-title
-        >
-          Spell Name
-        </v-card-title>
-        <v-card-text>
-          <v-text-field
-            v-model="spellName"
-            label="Enter Spell"
-            required
-          />
-        </v-card-text>
-        <v-divider></v-divider>
-        <v-card-actions>
-          <v-spacer></v-spacer>
-            <v-btn
-              color="primary"
-              @click="addSpell"
-            >
-              Ok
-            </v-btn>
-        </v-card-actions>
-      </v-card>
-    </v-dialog>
+    <InputBox
+        input-box-id="spell"
+        title="Spell Name"
+        label="Enter Spell"
+        default="Spell"
+        @input="addSpell"
+    />
 
-    <v-dialog
-      v-model="inputPoints"
-      width="500"
-    >
-      <v-card>
-        <v-card-title
-          class="headline grey lighten-2"
-          primary-title
-        >
-          Add Points
-        </v-card-title>
-        <v-card-text>
-          <v-text-field
-            v-model="pointsCount"
-            label="How Many"
-            required
-          />
-        </v-card-text>
-        <v-divider></v-divider>
-        <v-card-actions>
-          <v-spacer></v-spacer>
-          <v-btn
-            color="primary"
-            @click="addPoints"
-          >
-            Ok
-          </v-btn>
-        </v-card-actions>
-      </v-card>
-    </v-dialog>
+    <InputBox
+        input-box-id="points"
+        title="Add Points"
+        label="How Many"
+        :default="0"
+        @input="addPoints"
+    />
 
-    <v-dialog
-      v-model="showTest"
-      width="500"
-    >
-      <v-card>
-        <v-card-title
-          class="headline grey lighten-2"
-          primary-title
-        >
-          Результат
-        </v-card-title>
-        <v-card-text>
-          {{testResult}}
-        </v-card-text>
-        <v-divider></v-divider>
-        <v-card-actions>
-          <v-spacer></v-spacer>
-            <v-btn
-              color="primary"
-              @click="showTest = false"
-            >
-              Ok
-            </v-btn>
-        </v-card-actions>
-      </v-card>
-    </v-dialog>
+    <TestResult
+        title="Результат"
+    />
 
     <v-layout wrap>
       <v-flex xs12>
@@ -169,19 +54,13 @@
                   >
                     <v-list-tile-title>Reset</v-list-tile-title>
                   </v-list-tile>
-                  <v-list-tile
-                    @click=""
-                  >
+                  <v-list-tile @click="savePlayer">
                     <v-list-tile-title>Save</v-list-tile-title>
                   </v-list-tile>
-                  <v-list-tile
-                    @click=""
-                  >
+                  <v-list-tile @click="loadPlayer">
                     <v-list-tile-title>Load</v-list-tile-title>
                   </v-list-tile>
-                  <v-list-tile
-                    @click=""
-                  >
+                  <v-list-tile @click="editPlayer">
                     <v-list-tile-title>Edit</v-list-tile-title>
                   </v-list-tile>
                 </v-list>
@@ -213,14 +92,10 @@
                   Dice
                 </v-btn>
                 <v-list>
-                  <v-list-tile
-                    @click="roll"
-                  >
+                  <v-list-tile @click="roll">
                     <v-list-tile-title><v-icon>casino</v-icon>Roll</v-list-tile-title>
                   </v-list-tile>
-                  <v-list-tile
-                    @click="coin"
-                  >
+                  <v-list-tile @click="coin">
                     <v-list-tile-title><v-icon>casino</v-icon>Coin</v-list-tile-title>
                   </v-list-tile>
                 </v-list>
@@ -235,6 +110,7 @@
                 <v-list>
                   <v-list-tile
                     v-for="(a, index) in attrib"
+                    :key="index"
                     @click="testAttrib(index)"
                   >
                     <v-list-tile-title><v-icon>casino</v-icon>{{attrNames[index]}}</v-list-tile-title>
@@ -250,22 +126,7 @@
                     Dice1: TMenuItem;
                       Roll1: TMenuItem;
 
-                  Add1: TMenuItem;
-                  Delete1: TMenuItem;
-                  Clear1: TMenuItem;
-
-                  Add2: TMenuItem;
-                  Delete2: TMenuItem;
-                  Clear2: TMenuItem;
-
-                  Add3: TMenuItem;
-                  Delete3: TMenuItem;
-                  Clear3: TMenuItem;
-
-                  DeselectAll1: TMenuItem;
-                  AddMany1: TMenuItem;
                   Edit2: TMenuItem;
-                  Eat1: TMenuItem;
 
                   odOpen: TOpenDialog;
                   sdSave: TSaveDialog;
@@ -322,7 +183,7 @@
                   <v-toolbar-title>Предметы</v-toolbar-title>
                   <v-spacer></v-spacer>
                   <v-toolbar-items class="hidden-sm-and-down">
-                    <v-btn icon flat @click="inputItem = true"><v-icon>add</v-icon></v-btn>
+                    <v-btn icon flat @click="showInput('item')"><v-icon>add</v-icon></v-btn>
                     <v-btn icon flat @click="clearItems"><v-icon>clear</v-icon></v-btn>
                   </v-toolbar-items>
                 </v-toolbar>
@@ -352,7 +213,7 @@
                   <v-spacer></v-spacer>
                     <v-toolbar-items class="hidden-sm-and-down">
                       <v-btn icon flat @click="addPoint"><v-icon>done</v-icon></v-btn>
-                      <v-btn icon flat @click="inputPoints = true"><v-icon>done_all</v-icon></v-btn>
+                      <v-btn icon flat @click="showInput('points')"><v-icon>done_all</v-icon></v-btn>
                       <v-btn icon flat @click="deletePoint"><v-icon>remove</v-icon></v-btn>
                       <v-btn icon flat @click="clearPoints"><v-icon>clear</v-icon></v-btn>
                       <v-btn icon flat @click="resetPoints"><v-icon>replay</v-icon></v-btn>
@@ -361,8 +222,8 @@
                 <v-card-text>
                   <v-checkbox
                     v-for="(point, index) in points"
-                    :label="'' + (index + 1)
-"
+                    :label="'' + (index + 1)"
+                    :key="index"
                     v-model="points[index]"
                   />
                 </v-card-text>
@@ -374,7 +235,7 @@
                   <v-toolbar-title>Заклинания</v-toolbar-title>
                   <v-spacer></v-spacer>
                   <v-toolbar-items class="hidden-sm-and-down">
-                    <v-btn icon flat @click="inputSpell = true"><v-icon>add</v-icon></v-btn>
+                    <v-btn icon flat @click="showInput('spell')"><v-icon>add</v-icon></v-btn>
                     <v-btn icon flat @click="clearSpells"><v-icon>clear</v-icon></v-btn>
                   </v-toolbar-items>
                 </v-toolbar>
@@ -413,11 +274,17 @@
 </template>
 
 <script>
-  import { mapState } from 'vuex'
+  import { mapState, mapMutations } from 'vuex'
   import dice from '../dice'
+  import InputBox from './InputBox'
+  import TestResult from './TestResult'
 
   export default {
     name: "Main",
+    components: {
+        InputBox,
+        TestResult,
+    },
     computed: {
       ...mapState([
         'playerName',
@@ -425,21 +292,11 @@
         'items',
         'spells',
         'attrib',
-          'points',
+        'points',
       ]),
     },
     data: () =>({
-      inputPlayer: true,
-      inputItem: false,
-      inputSpell: false,
-      inputPoints: false,
-      name: 'Unnamed',
-      itemName: 'Unnamed',
-      spellName: 'Unnamed',
-      pointsCount: 0,
       memo: '',
-      testResult: null,
-      showTest: false,
       attrNames: [
         'Мастерство',
         'Выносливость',
@@ -453,10 +310,7 @@
       timeBackward() { this.$store.commit('modifyTime', -1) },
       timeReset() { this.$store.commit('resetTime') },
 
-      addItem() {
-        this.$store.commit('addItem', this.itemName)
-        this.inputItem = false
-      },
+      addItem(name) { this.$store.commit('addItem', name) },
       deleteItem(index) { this.$store.commit('deleteItem', index) },
       eatItem(index) {
         this.$store.commit('deleteItem', index)
@@ -464,56 +318,39 @@
       },
       clearItems() { this.$store.commit('resetItems') },
 
-      addSpell() {
-        this.$store.commit('addSpell', this.spellName)
-        this.inputSpell = false
-      },
+      addSpell(name) { this.$store.commit('addSpell', name) },
       deleteSpell(index) { this.$store.commit('deleteSpell', index) },
       clearSpells() { this.$store.commit('resetSpells') },
 
       addPoint() { this.$store.commit('addPoints', 1) },
-      addPoints() {
-        this.$store.commit('addPoints', this.pointsCount)
-        this.inputPoints = false
-      },
+      addPoints(count) { this.$store.commit('addPoints', count) },
       deletePoint() { this.$store.commit('deletePoint') },
       clearPoints() { this.$store.commit('clearPoints') },
       resetPoints() { this.$store.commit('resetPoints') },
 
       resetPlayer() { this.$store.dispatch('reset') },
-      /*
-      procedure Save1Click(Sender: TObject);
-      procedure Load1Click(Sender: TObject);
-      */
-      roll() {
-        // fmRoller.Show;
-      },
-      coin() {
-        this.testResult = (dice(1, 2) == 1)
-          ? 'Орел'
-          : 'Решка'
-        this.showTest = true
-      },
-      /*
-      procedure Edit2Click(Sender: TObject);
-      */
+
+      savePlayer() { /* procedure Save1Click(Sender: TObject); */ },
+      loadPlayer() { /* procedure Load1Click(Sender: TObject); */ },
+      editPlayer() { /* procedure Edit2Click(Sender: TObject); */ },
+
+      roll() { /* fmRoller.Show; */ },
+      coin() { this.setResult((dice(1, 2) === 1) ? 'Орел' : 'Решка') },
       testAttrib(index) {
         this.$store.dispatch('testAttrib', index)
           .then(result => {
-            this.testResult = result ? 'Успех!' : 'Провал!'
+            this.setResult(result ? 'Успех!' : 'Провал!')
             this.$store.commit('modifyAttrib', { index, value: -1 })
-            this.showTest = true
           });
       },
 
       setPlayer() {},
 
-      setPlayerName() {
-        this.$store.dispatch('createPlayer', { name: this.name })
-        this.$store.dispatch('reset')
-        this.inputPlayer = false
-      }
-    }
+      setPlayerName(name) { this.$store.dispatch('createPlayer', { name }) },
+      ...mapMutations( 'roll', [ 'setResult', ] ),
+      ...mapMutations( 'input', [ 'showInput', ] ),
+    },
+    mounted() { this.showInput('player') }
   }
 </script>
 

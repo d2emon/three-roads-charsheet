@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import dice from '../dice'
+import modules from './modules'
 
 Vue.use(Vuex)
 
@@ -47,6 +48,7 @@ end;
  */
 
 export default new Vuex.Store({
+  modules,
   state: {
     playerName: '', // FName
     attrib: {},
@@ -126,8 +128,9 @@ export default new Vuex.Store({
   },
   actions: {
     createPlayer: ({ commit, dispatch }, { name }) => {
-      commit('createPlayer', { name });
-      dispatch('generate');
+      commit('createPlayer', { name })
+      dispatch('reset')
+      dispatch('generate')
     },
     generate: ({ commit }) => {
       commit('createAttrib', { index: 0, value: dice(1, 6) + 6 });
