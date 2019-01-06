@@ -16,14 +16,6 @@
         @input="addSpell"
     />
 
-    <InputBox
-        input-box-id="points"
-        title="Add Points"
-        label="How Many"
-        :default="0"
-        @input="addPoints"
-    />
-
     <TestResult
         title="Результат"
     />
@@ -140,27 +132,7 @@
             </v-flex>
 
             <v-flex xs6>
-              <v-card>
-                <v-toolbar>
-                  <v-toolbar-title>Метки</v-toolbar-title>
-                  <v-spacer></v-spacer>
-                    <v-toolbar-items class="hidden-sm-and-down">
-                      <v-btn icon flat @click="addPoint"><v-icon>done</v-icon></v-btn>
-                      <v-btn icon flat @click="showInput('points')"><v-icon>done_all</v-icon></v-btn>
-                      <v-btn icon flat @click="deletePoint"><v-icon>remove</v-icon></v-btn>
-                      <v-btn icon flat @click="clearPoints"><v-icon>clear</v-icon></v-btn>
-                      <v-btn icon flat @click="resetPoints"><v-icon>replay</v-icon></v-btn>
-                    </v-toolbar-items>
-                </v-toolbar>
-                <v-card-text>
-                  <v-checkbox
-                    v-for="(point, index) in points"
-                    :label="'' + (index + 1)"
-                    :key="index"
-                    v-model="points[index]"
-                  />
-                </v-card-text>
-              </v-card>
+              <GamePoints />
             </v-flex>
             <v-flex xs6>
               <v-card>
@@ -213,10 +185,12 @@
   import TestResult from './TestResult'
   import GameTime from './GameTime'
   import GameItems from './GameItems'
+  import GamePoints from "./GamePoints";
 
   export default {
     name: "Main",
     components: {
+        GamePoints,
         InputBox,
         TestResult,
         GameTime,
@@ -225,7 +199,6 @@
     computed: {
       ...mapState([
         'playerName',
-        'items',
         'spells',
         'attrib',
         'points',
@@ -238,19 +211,11 @@
         'Выносливость',
         'Удача',
       ],
-
-      checkbox: false,
     }),
     methods: {
       addSpell(name) { this.$store.commit('addSpell', name) },
       deleteSpell(index) { this.$store.commit('deleteSpell', index) },
       clearSpells() { this.$store.commit('resetSpells') },
-
-      addPoint() { this.$store.commit('addPoints', 1) },
-      addPoints(count) { this.$store.commit('addPoints', count) },
-      deletePoint() { this.$store.commit('deletePoint') },
-      clearPoints() { this.$store.commit('clearPoints') },
-      resetPoints() { this.$store.commit('resetPoints') },
 
       resetPlayer() { this.$store.dispatch('reset') },
 

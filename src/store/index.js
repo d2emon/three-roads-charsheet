@@ -8,12 +8,13 @@ Vue.use(Vuex)
 export default new Vuex.Store({
   modules,
   state: {
-    playerName: '', // FName
+    playerName: '',
     attrib: {},
-    items: [], // FItems
-    spells: [], // FSpells
-    points: [],
-    money: 0, // FMoney
+    items: [],
+    spells: [],
+    points: 0,
+    pointsValues: [],
+    money: 0,
     time: 0,
   },
   getters: {
@@ -26,9 +27,6 @@ export default new Vuex.Store({
       state.spells = [];
       state.attrib = {};
     },
-
-    setPointsCount: (state, value) => {},
-    setPoint: (state, { index, value }) => {},
 
     resetTime: state => { state.time = 0 },
     modifyTime: (state, value) => {
@@ -78,14 +76,10 @@ export default new Vuex.Store({
     addSpell: (state, spell) => state.spells.push(spell),
     deleteSpell: (state, index) => state.spells.splice(index, 1),
 
-    resetPoints: state => state.points.forEach((point, index) => Vue.set(state.points, index, false)),
-    clearPoints: state => { state.points = [] },
-    addPoints: (state, count) => {
-      for(let i = 0; i < count; i++) {
-        state.points.push(false)
-      }
-    },
-    deletePoint: state => state.points.pop(),
+    resetPoints: state => { state.pointsValues = [] },
+    clearPoints: state => { state.points = 0 },
+    addPoints: (state, count) => { state.points += parseInt(count) },
+    deletePoint: state => { state.points -= 1 },
   },
   actions: {
     createPlayer: ({ commit, dispatch }, { name }) => {
@@ -102,6 +96,7 @@ export default new Vuex.Store({
       commit('resetTime');
       commit('resetItems');
       commit('resetSpells');
+      commit('clearPoints');
       commit('resetPoints');
     },
     testAttrib: ({ state }, index) => {
