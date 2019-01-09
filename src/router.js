@@ -12,6 +12,16 @@ export default new Router({
       component: Home
     },
     {
+      path: '/battle',
+      name: 'battle',
+      component: () => import('./views/Battle.vue')
+    },
+    {
+      path: '/edit',
+      name: 'edit',
+      component: () => import('./views/EditPlayer.vue')
+    },
+    {
       path: '/about',
       name: 'about',
       // route level code-splitting

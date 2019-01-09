@@ -4,7 +4,7 @@
         input-box-id="player"
         title="Player Name"
         label="Enter Player Name"
-        default="Unnamed"
+        :default="playerName"
         @input="createPlayer"
     />
 
@@ -28,7 +28,7 @@
                   <v-list-tile @click="loadPlayer">
                     <v-list-tile-title>Load</v-list-tile-title>
                   </v-list-tile>
-                  <v-list-tile @click="editPlayer">
+                  <v-list-tile to="/edit">
                     <v-list-tile-title>Edit</v-list-tile-title>
                   </v-list-tile>
                 </v-list>
@@ -70,6 +70,7 @@
                   </v-list-tile>
                 </v-list>
               </v-menu>
+              <v-btn flat to="/battle">Битва</v-btn>
             </v-toolbar-items>
           </v-toolbar>
           <v-layout row wrap>
@@ -147,7 +148,36 @@
       ],
     }),
     methods: {
-      editPlayer() { /* procedure Edit2Click(Sender: TObject); */ },
+      editPlayer() {
+        /*
+        fmEdit.leName.Text := Player.PlayerName;
+
+        fmEdit.seSkill.Value := Player.getAttrib(0);
+        fmEdit.seLife.Value  := Player.getAttrib(1);
+        fmEdit.seLuck.Value  := Player.getAttrib(2);
+
+        fmEdit.seSkillMax.Value := Player.getAttribMax(0);
+        fmEdit.seLifeMax.Value  := Player.getAttribMax(1);
+        fmEdit.seLuckMax.Value  := Player.getAttribMax(2);
+
+        fmEdit.seMoney.Value := Player.Money;
+
+        if fmEdit.ShowModal = mrOk then
+        begin
+          Player.PlayerName := fmEdit.leName.Text;
+
+          Player.setAttribMax(0, fmEdit.seSkill.Value);
+          Player.setAttribMax(1, fmEdit.seLife.Value);
+          Player.setAttribMax(2, fmEdit.seLuck.Value);
+
+          Player.setAttrib(0, fmEdit.seSkillMax.Value);
+          Player.setAttrib(1, fmEdit.seLifeMax.Value);
+          Player.setAttrib(2, fmEdit.seLuckMax.Value);
+
+          Player.Money := fmEdit.seMoney.Value;
+        end;
+        */
+      },
 
       coin() { this.setResult((dice(1, 2) === 1) ? 'Орел' : 'Решка') },
       doTest(index) {
@@ -179,7 +209,9 @@
       ),
       ...mapMutations( 'input', [ 'showInput', ] ),
     },
-    mounted() { this.showInput('player') }
+    mounted() {
+        this.createPlayer('Игрок')
+    }
   }
 </script>
 
