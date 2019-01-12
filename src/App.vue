@@ -6,22 +6,12 @@
             </v-toolbar-title>
             <v-spacer />
             <v-btn
-                flat
-                to="/conan"
+              flat
+              v-for="(link, index) in links"
+              :key="index"
+              :to="link.link"
             >
-                Конан
-            </v-btn>
-            <v-btn
-                 flat
-                 to="/fargal"
-            >
-                Фаргал
-            </v-btn>
-            <v-btn
-                flat
-                to="/hagen"
-            >
-                Хаген
+              {{link.text}}
             </v-btn>
         </v-toolbar>
 
@@ -35,7 +25,13 @@
 export default {
     name: 'App',
     data: () => ({
-        title: 'Лист Персонажа'
+        title: 'Лист Персонажа',
+        links: [
+          { link: '/three-roads', text: 'Три дороги' },
+          { link: '/conan', text: 'Конан' },
+          { link: '/fargal', text: 'Фаргал' },
+          { link: '/hagen', text: 'Хаген' },
+        ],
     })
 }
 </script>

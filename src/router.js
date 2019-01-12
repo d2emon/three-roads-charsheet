@@ -30,6 +30,15 @@ export default new Router({
       component: () => import(/* webpackChunkName: "about" */ './views/About.vue')
     },
     {
+      path: '/three-roads',
+      redirect: '/three-roads/start/0',
+    },
+    {
+      path: '/three-roads/:story/:articleId',
+      name: 'three-roads',
+      component: () => import('./views/ThreeRoads.vue')
+    },
+    {
       path: '/conan',
       name: 'conan',
       component: () => import('./views/Conan.vue')
